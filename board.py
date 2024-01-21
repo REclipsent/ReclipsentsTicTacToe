@@ -47,6 +47,8 @@ class Game:
         for cell in fullBoard:
             board.append(cell[0])
 
+
+        # Returns True if won, and also includes the player icon for the winning player to determine winner
         if board[0] == board[1] == board[2]:
             return [True, board[0]]
         elif board[3] == board[4] == board[5]:

@@ -1,11 +1,64 @@
 from board import Game
-import bot
+from bot import Bot
+
+
+def PlayOnePlayerGame(playerOneIcon, playerTwoIcon):
+    didSomeoneWin = list([False, ""])
+
+    comp = Bot(0)
+
+    game = Game(playerOneIcon, playerTwoIcon, True)
+
+    playerOnesTurn = True
+
+    while True:
+        game.PrintBoard()
+
+        if playerOnesTurn:
+            print("Players 1 Turn:")
+        else:
+            comp.DoMove(game)
+            didSomeoneWin = game.CheckForWin()
+
+            if didSomeoneWin[0]:
+                game.PrintBoard()
+                return didSomeoneWin
+            if didSomeoneWin[1] == "draw":
+                game.PrintBoard()
+                return didSomeoneWin
+            playerOnesTurn = not playerOnesTurn
+            continue
+
+        userInput = input()
+
+        if userInput == "q":
+            return didSomeoneWin
+
+        try:
+            userInput = int(userInput)
+        except ValueError:
+            print("Input a Number")
+            continue
+
+        game.DoMove(userInput, playerOnesTurn)
+
+        game.PrintBoard()
+
+        playerOnesTurn = not playerOnesTurn
+
+        didSomeoneWin = game.CheckForWin()
+
+        if didSomeoneWin[0]:
+            return didSomeoneWin
+        if didSomeoneWin[1] == "draw":
+            return didSomeoneWin
+
 
 
 def PlayTwoPlayerGame(playerOneIcon, playerTwoIcon):
     didSomeoneWin = list([False, ""])
 
-    game = Game(playerOneIcon, playerTwoIcon, True)
+    game = Game(playerOneIcon, playerTwoIcon, False)
 
     playerOnesTurn = True
 
@@ -49,7 +102,9 @@ def main():
         print("SinglePlayer(1) or MultiPlayer(2)")
         userInput = input()
         if userInput == "1":
-            didSomeoneWin = [True, playerOneIcon]
+            didSomeoneWin = PlayOnePlayerGame(playerOneIcon, playerTwoIcon)
+            # print("SinglePlayer is Currently a WIP")
+            # didSomeoneWin = [True, playerOneIcon]
             break
         elif userInput == "2":
             didSomeoneWin = PlayTwoPlayerGame(playerOneIcon, playerTwoIcon)
